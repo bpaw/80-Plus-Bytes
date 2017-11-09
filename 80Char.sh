@@ -6,14 +6,19 @@ d_flag=0	# whether -d flag was passed
 e_flag=0	# whether -e flag was passed
 f_flag=0	# whether -f flag was passed
 
+ext='.'		# default value for variable denoting extension
+dir='.'		# default value for variable denoting target directory
+
 while getopts ":d:e:f:" opt; do
   case $opt in
     d)
       echo "-d flag was specified with $OPTARG as the target directory." >&2
+      dir=$OPTARG
       d_flag=1
       ;;
     e)
       echo "-e flag was specified with $OPTARG as the target extension." >&2
+      ext=$OPTARG
       e_flag=1
       ;;
     f)
@@ -32,6 +37,7 @@ while getopts ":d:e:f:" opt; do
   esac
 done
 
+# Make sure that the -f flag is never used with any other flags
 if [[ $f_flag -eq 1 && $d_flag -eq 1 ]]; then
   echo "Cannot specify both -d or -f flags." >&2
   exit 1
@@ -44,5 +50,8 @@ if [[ $f_flag -eq 1 ]]; then
   echo "The file is: $file"
   grep '.\{81,\}' $file
 else
-  echo "-f flag was not specified, so 80Char is in directory mode"
+  echo "-f flag was not specified, so 80Char is in directory mode. You want to search for all files in $dir with the following extension: $ext"
+
+  find -d $dir | grep "$ext" 
+
 fi
