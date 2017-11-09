@@ -55,8 +55,18 @@ if [[ $f_flag -eq 1 ]]; then
 else
   echo "-f flag was not specified, so 80Char is in directory mode. You want to search for all files in $dir with the following extension: $ext"
 
+  violations=""  
+
   for file_to_check in `find -d $dir | grep "$ext"`
   do
-    echo "currently processing: $file_to_check"
+    #echo "currently processing: $file_to_check"
+    status=""
+    status=`grep -H -n '.\{81,\}' "$file_to_check"`
+    if [ $? -eq 0 ]; then
+      #echo "Found a violation in $file_to_check:"
+      echo $status
+      echo
+    fi
+
   done
 fi
