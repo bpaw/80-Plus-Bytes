@@ -1,4 +1,4 @@
-#!/bin/bash
+#/bin/bash
 
 file=""
 
@@ -46,12 +46,17 @@ elif [[ $f_flag -eq 1 && $e_flag -eq 1 ]]; then
   exit 1
 fi
 
+# Meat of the -f flag logic
 if [[ $f_flag -eq 1 ]]; then 
   echo "The file is: $file"
-  grep '.\{81,\}' $file
+  grep '.\{81,\}' $file				
+
+# Meat of the -d (default) and -e logic
 else
   echo "-f flag was not specified, so 80Char is in directory mode. You want to search for all files in $dir with the following extension: $ext"
 
-  find -d $dir | grep "$ext" 
-
+  for file_to_check in `find -d $dir | grep "$ext"`
+  do
+    echo "currently processing: $file_to_check"
+  done
 fi
