@@ -9,7 +9,14 @@ f_flag=0	# whether -f flag was passed
 ext='.'		# default value for variable denoting extension
 dir='.'		# default value for variable denoting target directory
 
+
+### Constants for printing ###
+
+
+F_ALONE="The -f flag should not be used with any other flags"
+FILES_ONLY="Only pass in files when using the -f flag."
 NONE_FOUND="None of the given files contain lines over 80 characters."
+VIOLATIONS_FOUND="VIOLATIONS FOUND:"
 
 # getopts for arg parsing yay
 while getopts ":d:e:f:" opt; do
@@ -39,10 +46,10 @@ done
 
 # Make sure that the -f flag is never used with any other flags
 if [[ $f_flag -eq 1 && $d_flag -eq 1 ]]; then
-  echo "Cannot specify both -d or -f flags." >&2
+  echo $F_ALONE >&2
   exit 1
 elif [[ $f_flag -eq 1 && $e_flag -eq 1 ]]; then
-  echo "Cannot specify both -e or -f flags." >&2
+  echo $F_ALONE >&2
   exit 1
 fi
 
@@ -53,7 +60,7 @@ violations=0
 if [[ $f_flag -eq 1 ]]; then 
 
   if [ -d file ]; then
-    echo "Only pass in files when using the -f flag."
+    echo $FILES_ONLY
     exit 1
   fi
 
@@ -62,7 +69,7 @@ if [[ $f_flag -eq 1 ]]; then
   if [ $? -eq 0 ]; then
     if [[ $violations -eq 0 ]]; then 
       echo
-      echo "VIOLATIONS FOUND:"
+      echo $VIOLATIONS_FOUND
       echo
     fi
     
@@ -84,7 +91,7 @@ else
       if [ $? -eq 0 ]; then
         if [[ $violations -eq 0 ]]; then 
           echo
-          echo "VIOLATIONS FOUND:"
+          echo $VIOLATIONS_FOUND
           echo
         fi
 
