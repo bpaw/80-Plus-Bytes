@@ -9,6 +9,9 @@ f_flag=0	# whether -f flag was passed
 ext='.'		# default value for variable denoting extension
 dir='.'		# default value for variable denoting target directory
 
+NONE_FOUND="None of the given files contain lines over 80 characters."
+
+# getopts for arg parsing yay
 while getopts ":d:e:f:" opt; do
   case $opt in
     d)
@@ -43,12 +46,13 @@ elif [[ $f_flag -eq 1 && $e_flag -eq 1 ]]; then
   exit 1
 fi
 
+# Flag used for determining whether to print final message
 violations=0
 
 # Meat of the -f flag logic
 if [[ $f_flag -eq 1 ]]; then 
 
-  if [ ! -f file ]; then
+  if [ -d file ]; then
     echo "Only pass in files when using the -f flag."
     exit 1
   fi
@@ -62,10 +66,10 @@ if [[ $f_flag -eq 1 ]]; then
       echo
     fi
     
+    violations=1
+    
     echo $status
   fi
-
-  violations=1
 
 # Meat of the -d (default) and -e logic
 else
@@ -92,6 +96,7 @@ else
   done
 fi
 
+# let user know if no files had lines over 80 chars
 if [[ $violations -eq 0 ]]; then
-  echo "None of the given files contain lines over 80 characters."
+  echo $NONE_FOUND
 fi
