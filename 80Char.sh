@@ -59,7 +59,7 @@ violations=0
 # Meat of the -f flag logic
 if [[ $f_flag -eq 1 ]]; then 
 
-  if [ -d file ]; then
+  if [ -d $file ]; then
     echo $FILES_ONLY
     exit 1
   fi
