@@ -11,3 +11,13 @@ That is why I am working on this project so that I can easily parse through ever
 * [x] use getopts to check for all files of a given extension within current directory
 * [x] use getopts to check all files of a given extension within a given directory
 * [x] use getopts to allow for recursively checking all the given directory's subdirectories (current directory if not specified).
+
+## Usage
+
+./80Chars.sh
+
+./80Chars.sh -f [filename]
+
+./80Chars.sh -e [extension]
+
+./80Chars.sh -d [directory name]
