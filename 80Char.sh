@@ -51,6 +51,12 @@ violations=0
 # Meat of the -f flag logic
 if [[ $f_flag -eq 1 ]]; then 
   #echo "The file is: $file"
+
+  if [ ! -f file ]; then
+    echo "Only pass in files when using the -f flag."
+    exit 1
+  fi
+
   status=`grep -H -n '.\{81,\}' "$file"`
 
   if [ $? -eq 0 ]; then
@@ -72,22 +78,23 @@ else
 
   for file_to_check in `find -d $dir | grep "$ext"`
   do
+    if [ -f $file_to_check ]; then
+      #echo "currently processing: $file_to_check"
+      status=""
+      status=`grep --binary-files=without-match -H -n '.\{81,\}' "$file_to_check"`
 
-    #echo "currently processing: $file_to_check"
-    status=""
-    status=`grep -H -n '.\{81,\}' "$file_to_check"`
+      if [ $? -eq 0 ]; then
+        if [[ $violations -eq 0 ]]; then 
+          echo
+          echo "VIOLATIONS FOUND:"
+          echo
+        fi
 
-    if [ $? -eq 0 ]; then
-      if [[ $violations -eq 0 ]]; then 
-        echo
-        echo "VIOLATIONS FOUND:"
-        echo
+        violations=1
+        #echo "Found a violation in $file_to_check:"
+        echo $status
+        echo		# for \n, not very readable output right now 
       fi
-
-      violations=1
-      #echo "Found a violation in $file_to_check:"
-      echo $status
-      echo		# for \n, not very readable output right now 
     fi
   done
 fi
