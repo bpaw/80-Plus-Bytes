@@ -1,1 +1,0 @@
-find -d [directory_name] | grep [extension]
