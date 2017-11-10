@@ -12,17 +12,14 @@ dir='.'		# default value for variable denoting target directory
 while getopts ":d:e:f:" opt; do
   case $opt in
     d)
-      #echo "-d flag was specified with $OPTARG as the target directory." >&2
       dir=$OPTARG
       d_flag=1
       ;;
     e)
-      #echo "-e flag was specified with $OPTARG as the target extension." >&2
       ext=$OPTARG
       e_flag=1
       ;;
     f)
-      #echo "-f flag was triggered with $OPTARG as the target file." >&2
       file=$OPTARG
       f_flag=1
       ;;
@@ -50,7 +47,6 @@ violations=0
 
 # Meat of the -f flag logic
 if [[ $f_flag -eq 1 ]]; then 
-  #echo "The file is: $file"
 
   if [ ! -f file ]; then
     echo "Only pass in files when using the -f flag."
@@ -74,12 +70,10 @@ if [[ $f_flag -eq 1 ]]; then
 # Meat of the -d (default) and -e logic
 else
 
-  #echo "-f flag was not specified, so 80Char is in directory mode. You want to search for all files in $dir with the following extension: $ext"
 
   for file_to_check in `find -d $dir | grep "$ext"`
   do
     if [ -f $file_to_check ]; then
-      #echo "currently processing: $file_to_check"
       status=""
       status=`grep --binary-files=without-match -H -n '.\{81,\}' "$file_to_check"`
 
@@ -91,7 +85,6 @@ else
         fi
 
         violations=1
-        #echo "Found a violation in $file_to_check:"
         echo $status
         echo		# for \n, not very readable output right now 
       fi
