@@ -82,7 +82,7 @@ if [[ $f_flag -eq 1 ]]; then
 else
 
 
-  for file_to_check in `find -d $dir | grep "$ext"`
+  for file_to_check in `find $dir -depth -type f \( -iname "$ext" \)`
   do
     if [ -f $file_to_check ]; then
       status=""
